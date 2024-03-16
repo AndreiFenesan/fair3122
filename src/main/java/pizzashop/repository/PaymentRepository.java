@@ -17,18 +17,14 @@ public class PaymentRepository {
         readPayments();
     }
 
-    private void readPayments(){
-        //ClassLoader classLoader = PaymentRepository.class.getClassLoader();
+    private void readPayments() {
         File file = new File(filename);
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new FileReader(file));
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line = null;
-            while((line=br.readLine())!=null){
-                Payment payment=getPayment(line);
+            while ((line = br.readLine()) != null) {
+                Payment payment = getPayment(line);
                 paymentList.add(payment);
             }
-            br.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -38,7 +34,7 @@ public class PaymentRepository {
 
     private Payment getPayment(String line){
         Payment item=null;
-        if (line==null|| line.equals("")) return null;
+        if (line==null|| line.isEmpty()) return null;
         StringTokenizer st=new StringTokenizer(line, ",");
         int tableNumber= Integer.parseInt(st.nextToken());
         String type= st.nextToken();

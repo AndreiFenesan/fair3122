@@ -12,8 +12,9 @@ import javafx.stage.WindowEvent;
 import pizzashop.controller.MainGUIController;
 import pizzashop.gui.KitchenGUI;
 import pizzashop.model.PaymentType;
-import pizzashop.repository.MenuRepository;
+import pizzashop.repository.PizzaRepository;
 import pizzashop.repository.PaymentRepository;
+import pizzashop.service.PaymentService;
 import pizzashop.service.PizzaService;
 
 import java.util.Optional;
@@ -21,17 +22,17 @@ import java.util.Optional;
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
 
-        MenuRepository repoMenu=new MenuRepository();
-        PaymentRepository payRepo= new PaymentRepository();
-        PizzaService service = new PizzaService(repoMenu, payRepo);
+        PizzaRepository repoMenu = new PizzaRepository();
+        PaymentRepository payRepo = new PaymentRepository();
+        PaymentService paymentService = new PaymentService(payRepo);
+        PizzaService service = new PizzaService(repoMenu);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/mainFXML.fxml"));
-        //VBox box = loader.load();
         Parent box = loader.load();
         MainGUIController ctrl = loader.getController();
-        ctrl.setService(service);
+        ctrl.setService(service, paymentService);
         primaryStage.setTitle("PizzeriaX");
         primaryStage.setResizable(false);
         primaryStage.setAlwaysOnTop(false);
@@ -40,18 +41,16 @@ public class Main extends Application {
             public void handle(WindowEvent event) {
                 Alert exitAlert = new Alert(Alert.AlertType.CONFIRMATION, "Would you like to exit the Main window?", ButtonType.YES, ButtonType.NO);
                 Optional<ButtonType> result = exitAlert.showAndWait();
-                if (result.get() == ButtonType.YES){
-                    //Stage stage = (Stage) this.getScene().getWindow();
-                    System.out.println("Incasari cash: "+service.getTotalAmount(PaymentType.Cash));
-                    System.out.println("Incasari card: "+service.getTotalAmount(PaymentType.Card));
+                if (result.get() == ButtonType.YES) {
+                    System.out.println("Incasari cash: " + paymentService.getTotalAmount(PaymentType.Cash));
+                    System.out.println("Incasari card: " + paymentService.getTotalAmount(PaymentType.Card));
 
                     primaryStage.close();
                 }
                 // consume event
-                else if (result.get() == ButtonType.NO){
+                else if (result.get() == ButtonType.NO) {
                     event.consume();
-                }
-                else {
+                } else {
                     event.consume();
 
                 }
@@ -64,6 +63,7 @@ public class Main extends Application {
         kitchenGUI.KitchenGUI();
     }
 
-    public static void main(String[] args) { launch(args);
+    public static void main(String[] args) {
+        launch(args);
     }
 }

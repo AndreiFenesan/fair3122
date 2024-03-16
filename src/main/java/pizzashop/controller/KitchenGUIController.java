@@ -58,7 +58,7 @@ public class KitchenGUIController {
             selectedOrder = kitchenOrdersList.getSelectionModel().getSelectedItem();
             kitchenOrdersList.getItems().remove(selectedOrder);
             extractedTableNumberString = selectedOrder.toString().subSequence(5, 6).toString();
-            extractedTableNumberInteger = Integer.valueOf(extractedTableNumberString);
+            extractedTableNumberInteger = Integer.parseInt(extractedTableNumberString);
             System.out.println("--------------------------");
             System.out.println("Table " + extractedTableNumberInteger +" ready at: " + now.get(Calendar.HOUR)+":"+now.get(Calendar.MINUTE));
             System.out.println("--------------------------");
