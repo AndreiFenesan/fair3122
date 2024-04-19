@@ -17,6 +17,10 @@ public class PaymentRepository {
         readPayments();
     }
 
+    public void clear(){
+        paymentList.clear();
+    }
+
     private void readPayments() {
         File file = new File(filename);
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
