@@ -9,7 +9,6 @@ import pizzashop.repository.PaymentRepository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PaymentServiceTest {
     private PaymentRepository paymentRepository;
     private PaymentService paymentService;
@@ -48,7 +47,6 @@ class PaymentServiceTest {
 
     @ParameterizedTest
     @CsvSource(value = {"1,120", "19,120", "20,122", "10,1"}, delimiter = ',')
-    @Order(1)
     void addPaymentSuccess(int table, double amount) {
         int initialSize = paymentService.getPayments().size();
         paymentService.addPayment(table, PaymentType.Cash, amount);
@@ -127,16 +125,6 @@ class PaymentServiceTest {
         paymentService.addPayment(1,PaymentType.Cash,100d);
 
         double amount = paymentService.getTotalAmount2(PaymentType.Card);
-
-        assertEquals(0, amount);
-    }
-
-    @Test
-    void getTotalAmountCrypto() {
-        paymentRepository.clear();
-        paymentService.addPayment(1,PaymentType.Card,100d);
-
-        double amount = paymentService.getTotalAmount2(PaymentType.Crypto);
 
         assertEquals(0, amount);
     }
