@@ -12,4 +12,5 @@ module pizzashop {
     exports pizzashop.controller;
     exports pizzashop.gui;
     opens pizzashop.gui to javafx.fxml;
+    opens pizzashop.service;
 }
